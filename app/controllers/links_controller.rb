@@ -1,7 +1,9 @@
 class LinksController < ApplicationController
   def index
     @link = Link.new
-    @links = Link.order(created_at: :desc)
+    @links = Link.order(created_at: :desc).limit(25)
+    @click_counts = Click.where(link_id: @links.map(&:id)).group(:link_id).count
+
   end
 
   def create
