@@ -1,0 +1,30 @@
+# Render Blueprint — Infrastructure as Code for this app.
+# Render reads this file to create the web service + database.
+# Docs: https://render.com/docs/blueprint-spec
+
+databases:
+  - name: testing-db
+    plan: free
+    databaseName: testing_production
+    user: testing
+    region: oregon
+
+services:
+  - type: web
+    name: testing
+    runtime: docker          # build from our Dockerfile (same image as local/CI)
+    plan: free
+    region: oregon
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /up     # Render polls this to know the app is alive
+    autoDeploy: true         # <-- the "CD": every push to main redeploys
+    envVars:
+      - key: RAILS_MASTER_KEY
+        sync: false          # secret — you paste this in the dashboard, never in git
+      - key: DATABASE_URL
+        fromDatabase:        # Render injects the DB connection string automatically
+          name: testing-db
+          property: connectionString
+      - key: WEB_CONCURRENCY
+        value: "2"           # Puma worker processes (tune for the free tier)
