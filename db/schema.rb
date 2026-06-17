@@ -10,9 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_06_17_100928) do
+ActiveRecord::Schema[8.0].define(version: 2026_06_17_104334) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "clicks", force: :cascade do |t|
+    t.bigint "link_id", null: false
+    t.string "ip_address"
+    t.string "user_agent"
+    t.string "referrer"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["link_id"], name: "index_clicks_on_link_id"
+  end
 
   create_table "links", force: :cascade do |t|
     t.string "original_url", null: false
@@ -21,4 +31,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_17_100928) do
     t.datetime "updated_at", null: false
     t.index ["short_code"], name: "index_links_on_short_code", unique: true
   end
+
+  add_foreign_key "clicks", "links"
 end
