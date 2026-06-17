@@ -1,0 +1,28 @@
+<h1>URL Shortener</h1>
+
+<%= form_with model: @link do |f| %>
+  <% if @link.errors.any? %>
+    <ul style="color:red">
+      <% @link.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  <% end %>
+  <%= f.url_field :original_url, placeholder: "https://example.com", required: true %>
+  <%= f.submit "Shorten" %>
+<% end %>
+
+<table border="1" cellpadding="6" style="margin-top:1rem">
+  <thead>
+    <tr><th>Short code</th><th>Original URL</th><th>Created</th></tr>
+  </thead>
+  <tbody>
+    <% @links.each do |link| %>
+      <tr>
+        <td><%= link_to link.short_code, short_link_path(link.short_code) %></td>
+        <td><%= link.original_url %></td>
+        <td><%= link.created_at.strftime("%Y-%m-%d %H:%M") %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
