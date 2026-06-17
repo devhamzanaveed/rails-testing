@@ -1,9 +1,9 @@
 namespace :demo do
     desc "Seed fake links — usage: bin/rails demo:seed[100000]"
-    task :seed, [:count] => :environment do |_t, args|
+    task :seed, [ :count ] => :environment do |_t, args|
       count = (args[:count] || 100_000).to_i
       batch = 5_000
-  
+
       puts "Seeding #{count} links in batches of #{batch}..."
       (count / batch).times do |i|
         rows = Array.new(batch) do |j|

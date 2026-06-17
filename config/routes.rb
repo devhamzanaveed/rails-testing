@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   root "links#index"
-  resources :links, only: [:index, :create]
+  resources :links, only: [ :index, :create ]
 
   # Rails defaults that must sit ABOVE the catch-all, or it swallows them.
   get "up" => "rails/health#show", as: :rails_health_check
